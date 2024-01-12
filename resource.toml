@@ -1,7 +1,7 @@
 type = "js"
 main = "server/server.js"
 deps = [ 
-    "vchat",
+    "chat"
 ]
 required-permissions = ["Screen Capture"]
 client-main = "client/index.ts"

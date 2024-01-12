@@ -1,9 +1,9 @@
 /// <reference types="@altv/types-server" />
 
 import * as alt from 'alt-server';
-import { Permissions, PlayerData } from './player.js';
-import { trcoreFunctionsGetIdentifier } from './functions.js';
-import { addCommand } from './commands.js';
+import { PlayerData } from './player.js';
+import { GetIdentifier } from './functions.js';
+
 
 
 
@@ -17,7 +17,10 @@ alt.on('resourceStart', () => {
     if (debugmode) {
         alt.logWarning('Debug mode enabled.');
     }
-    
+    import ("./commands.js");
+    import ("./functions.js");
+    import ("./events.js");
+    import ("./player.js");
     
 
 })
@@ -28,7 +31,7 @@ alt.on('resourceStart', () => {
 
 alt.on('player:create', (player: PlayerData, citizenid: number) => {
     if (player) {
-        let license = trcoreFunctionsGetIdentifier(player);
+        let license = GetIdentifier(player);
         let plydata = new PlayerData(player);
         
         alt.emitClient(player, 'player:create', license);

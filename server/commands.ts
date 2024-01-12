@@ -2,8 +2,8 @@
 /// <reference types="@altv-vchat/types"/>
 
 import * as alt from 'alt-server';
-import * as chat from 'vchat';
-import { Permissions, PlayerData } from './player.js';
+import * as chat from '../../chat/server/index.js';
+import { PlayerData } from './player.js';
 
 
 
@@ -29,33 +29,25 @@ import { Permissions, PlayerData } from './player.js';
     */
 export function addCommand(Player: PlayerData, commandname: string, desc: string, parameters: { name: string, description: string }, argsrequired: boolean, permission: number, callback: () => void ) {
 
-    // Create the command suggestion object
-    let suggestion: chat.CommandSuggestion = {
-        name: commandname,
-        description: desc,
-        parameters: [
-            {
-                name: parameters.name,
-                description: parameters.description
-            }
-        ]
-    };
+
 
     // Check player permission
-    if (Player.permission >= permission && chat.isMuted(Player)) {
+    if (Player.permission >= permission) {
 
         // Register the command and suggestion
         chat.registerCmd(commandname, callback);
-        chat.addSuggetionAll(suggestion);
+        
 
     }
 
 }
 
-chat.registerCmd('help', (player: PlayerData) => {
+
+chat.registerCmd('help', (player: PlayerData, args) => {
     alt.log(`Help command called by ${player.name}`);
-    chat.send(player, 'No help, xD'+ player.name);
+    chat.send(player, 'No help, xD ' + player.name);
 })
+
 
 chat.registerCmd('spawn', (player: PlayerData, args) => {
     let model = args[0];

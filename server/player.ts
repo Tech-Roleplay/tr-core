@@ -1,8 +1,8 @@
 /// <reference types="@altv/types-server" />
 
 import * as alt from 'alt-server';
-import { GetIdentifier, trcoreFunctionsGetIdentifier } from './functions.js';
-import { execute } from './../../mysql/mysql.js';
+import { GetIdentifier } from './functions.js';
+//import { execute } from './../../mysql/mysql.js';
 import { Dir } from 'fs';
 
 
@@ -463,11 +463,11 @@ class PlayerData extends alt.Player {
         if (player!= null) {
             if (citizenid){
                 let license = GetIdentifier(player);
-                let plydata = execute(`SELECT * FROM players where citizenid = '${citizenid}'`);
-                let PlayerData = plydata
-                if (PlayerData && license == player.discordID){
+                //let plydata = execute(`SELECT * FROM players where citizenid = '${citizenid}'`);
+                //let PlayerData = plydata
+                /*if (PlayerData && license == player.discordID){
                     plydata.
-                }
+                }*/
             }
             else{
                 //DropPlayer(player, Lang:t(info.exploit_dropped))
