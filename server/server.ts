@@ -10,20 +10,21 @@ import { GetIdentifier } from './functions.js';
 
 
 alt.on('resourceStart', () => {
-    let sv_version = "0.0.1";
-    alt.log('Core started.');
-    alt.log('Server version:' + sv_version)
+
+    alt.log('[tr-core] Core started.');
+    alt.log('[tr-core] Server version:' + sv_version);
     let debugmode = alt.getServerConfig().debug;
     if (debugmode) {
-        alt.logWarning('Debug mode enabled.');
+        alt.logWarning('[tr-core] Debug mode enabled.');
     }
-    import ("./commands.js");
-    import ("./functions.js");
-    import ("./events.js");
-    import ("./player.js");
-    
+    import("./commands.js");
+    import("./functions.js");
+    import("./events.js");
+    import("./player.js");
+
 
 })
+
 
 
 
@@ -42,4 +43,7 @@ alt.on('playerConnect', (player: PlayerData) => {
 
 })
 
+alt.on('resourceStop', () => {
+    alt.log('[tr-core] Core stopped.')
 
+})
