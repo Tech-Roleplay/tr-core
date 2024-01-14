@@ -24,7 +24,7 @@ export function GetCoords(object: alt.Object) {
  * Returns the player's discord identifier.
 * @param: PlayerData: The player's data
 */
-export function GetIdentifier(player: PlayerData) {
+export function GetIdentifier(player: alt.Player) {
     let identifier = player.discordID;
     return identifier;
 }
@@ -59,7 +59,7 @@ export function GetPlayerByCitzenID(citizenid: string) {
  */
 export function GetOfflinePlayerByCititzenId(citizenid: string) {
     let player = PlayerData.all.find(p => p.citizenid == citizenid);
-    if (player.ping >= 0) {
+    if (player && player.ping >= 0) {
         return player;
     }
     return null;

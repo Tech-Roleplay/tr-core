@@ -1,0 +1,40 @@
+{
+    "MaxPlayers": 100,
+    "sv_version": "0.0.1-alpha",
+    "DefaultSpwan": [-1035.71, -2731.87, 12.86],
+    "UpdateInterval": 3,
+    "UpdateIntervalInMs": 180000,
+    "UpdateIntervalStatus": 5000,
+    "tr_locale": "en",
+    "MoneyStartAmount": {"cash": 1250, "bank": 20000, "crypto": 0},
+    "MoneyPayCheckTimeOut": 10,
+    "MoneyPayCheckSociety": true,
+    "PlayerHungerRate": 4.2,
+    "PlayerThirstRate": 3.2,
+    "PlayerBloodType": ["A+", "A-", "B+", "B-", "O+", "O-", "AB+", "AB-"],
+    "ServerClosed": false,
+    "ServerClosedReason": "Server is closed, more infomations see ...",
+    "ServerUptime": 0,
+    "ServerWhitelist": false,
+    "ServerWhitelistPlayers": [],
+    "ServerPVP": true,
+    "ServerDiscord": "https://discord.gg/Gt4zhKc2s2",
+    "CheckDuplicateDiscordID": true,
+    "CommandOOCColor": {"r": 255, "g": 151, "b": 133},
+    "NotifyNotificationStyling": {
+      "group": true,
+      "postion": "right",
+      "progress": true
+    },
+    "NotifyVariantDefinitions": {
+      "success": {"classes": "success", "icon": "task_alt"},
+      "primary": {"classes": "primary", "icon": "notifications"},
+      "error": {"classes": "error", "icon": "warning"},
+      "police": {"classes": "police", "icon": "local_police"},
+      "ambulance": {"classes": "ambulance", "icon": "fas fa-ambulance"},
+      "firefighter": {"classes": "firefighter", "icon": "fas fa-fire-extinguisher"},
+      "mechanician": {"classes": "mechanician", "icon": "fas fa-wrench"},
+      "alert": {"classes": "e-alert", "icon": "fas da-triangle-exclamation"}
+    }
+  }
+  

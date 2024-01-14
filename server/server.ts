@@ -3,6 +3,8 @@
 import * as alt from 'alt-server';
 import { PlayerData } from './player.js';
 import { GetIdentifier } from './functions.js';
+import { sv_version } from './../config.js';
+
 
 
 
@@ -12,7 +14,7 @@ import { GetIdentifier } from './functions.js';
 alt.on('resourceStart', () => {
 
     alt.log('[tr-core] Core started.');
-    alt.log('[tr-core] Server version:' + sv_version);
+    alt.log('[tr-core] Server version: ' + sv_version);
     let debugmode = alt.getServerConfig().debug;
     if (debugmode) {
         alt.logWarning('[tr-core] Debug mode enabled.');
@@ -26,22 +28,15 @@ alt.on('resourceStart', () => {
 })
 
 
-
-
-
-
 alt.on('player:create', (player: PlayerData, citizenid: number) => {
     if (player) {
         let license = GetIdentifier(player);
-        let plydata = new PlayerData(player);
         
         alt.emitClient(player, 'player:create', license);
     }
 });
 
-alt.on('playerConnect', (player: PlayerData) => {
 
-})
 
 alt.on('resourceStop', () => {
     alt.log('[tr-core] Core stopped.')

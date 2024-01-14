@@ -49,16 +49,6 @@ export enum Gender {
 
 }*/
 
-export function CreatePlayer(player: PlayerData, citizenid: string)
-{
-    let ply = PlayerData.all.find(Player => ply.citzenid == citizenid);
-    if (player.ping >= 0) {
-        //player.charinfo.
-        return player;
-    }
-    return null;
-}
-
 
 
 
@@ -495,7 +485,7 @@ class PlayerData extends alt.Player {
      * @param methodName - The name of the method to register the handler for
      * @param handler - The handler function to call when the method is invoked
      */
-    AddMetheod(methodName: string, handler: Function) {
+    /*AddMetheod(methodName: string, handler: Function) {
         this[methodName] = handler;
     }
     
@@ -505,9 +495,9 @@ class PlayerData extends alt.Player {
      * @param fieldName - The name of the field to add.
      * @param data - The data to associate with the field.
      */
-    AddField(fieldName: string, data: any) {
+    /*AddField(fieldName: string, data: any) {
         this[fieldName] = data;
-    }
+    }*/
 
 }
 

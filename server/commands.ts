@@ -43,13 +43,13 @@ export function addCommand(Player: PlayerData, commandname: string, desc: string
 }
 
 
-chat.registerCmd('help', (player: PlayerData, args) => {
+chat.registerCmd('help', (player: PlayerData, args: any) => {
     alt.log(`Help command called by ${player.name}`);
     chat.send(player, 'No help, xD ' + player.name);
 })
 
 
-chat.registerCmd('spawn', (player: PlayerData, args) => {
+chat.registerCmd('spawn', (player: PlayerData, args: any) => {
     let model = args[0];
     if (!model) {
         model = 'mp_m_freemode_01';
