@@ -56,8 +56,29 @@ alt.on('trcore:Server:CloseServer', (player: PlayerData, reason: string) => {
         
         // set serverclose to true, but is not funtional
         //config.ServerClosed = true;
+        //config.ServerCloseReason = true;
+
 
     }
 })
 
+alt.on('trcore:Server:OpenServer', (player: PlayerData) => {
+    if (player.permission >= Permissions.God) {
+        alt.log(`[tr-core] Server open by ${player.name}(${player.discordID})`)
+    }
+})
+
+alt.on('trcore:UpdatePlayer', (player: PlayerData) => {
+    if (!player) return;
+
+
+})
+
+alt.on('trcore:ToggleDuty', (player: PlayerData) => {
+    if (player.Job.jobonduty) {
+        player.Job.jobonduty = false
+    } else {
+        player.Job.jobonduty = true
+    }
+})
 
