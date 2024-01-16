@@ -3,7 +3,7 @@
 
 import * as alt from 'alt-server';
 import * as chat from '../../chat/server/index.js';
-import { PlayerData } from './player.js';
+import { Permissions, PlayerData } from './player.js';
 
 
 
@@ -27,7 +27,7 @@ import { PlayerData } from './player.js';
      * @param callback - The function to call when the command is run
      * @param permission - The minimum permission level required to run this command
     */
-export function addCommand(Player: PlayerData, commandname: string, desc: string, parameters: { name: string, description: string }, argsrequired: boolean, permission: number, callback: () => void ) {
+export function addCommand(Player: PlayerData, commandname: string, desc: string, parameters: { name: string, description: string }, argsrequired: boolean, permission: number, callback: () => void) {
 
 
 
@@ -36,7 +36,7 @@ export function addCommand(Player: PlayerData, commandname: string, desc: string
 
         // Register the command and suggestion
         chat.registerCmd(commandname, callback);
-        
+
 
     }
 
@@ -64,3 +64,27 @@ chat.registerCmd('spawn', (player: PlayerData, args: any) => {
         player.model = 'mp_m_freemode_01';
     }
 });
+
+chat.registerCmd('tp', (player: PlayerData, x: number, y: number, z: number) => {
+    if (player.permission >= Permissions.Admin) {
+        if (x && !y && !z) {
+            let target = x
+            let tagetplay: any = PlayerData.all.find(p => p.id == target)
+            player.pos = tagetplay.pos;
+        }
+        if (x && y && z) {
+            player.pos = new alt.Vector3(x, y, z)
+        }
+        else {
+            alt.emitClient(player, 'trcore:Notify', "ARGS WRONG")
+        }
+    }
+
+})
+
+chat.registerCmd('tpm', (player: PlayerData) => {
+    if (player.permission >= Permissions.Admin) {
+        alt.emitClient(player, 'trcore:GotoMarker')
+    }
+})
+

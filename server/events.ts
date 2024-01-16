@@ -2,7 +2,7 @@
 
 import * as alt from 'alt-server';
 import { Permissions, PlayerData } from './player.js';
-import { GetIdentifier } from './functions.js';
+import { CreateVehicle, GetIdentifier, SpwanVehicle } from './functions.js';
 import * as config from './../config.js';
 
 alt.on('playerDropped', (player: PlayerData, reason: string) => {
@@ -82,3 +82,43 @@ alt.on('trcore:ToggleDuty', (player: PlayerData) => {
     }
 })
 
+alt.on('playerEnteringVehicle', (player: alt.Player, veh: alt.Vehicle, seat: number) => {
+    let data = {
+        vehicle: veh,
+        seat: seat,
+        name: veh.model,
+        event: 'Entering'
+    }
+    alt.emitClient(player, 'trcore:Client:VehicleInfo', data);
+})
+
+alt.on('playerEnteredVehicle', (player: alt.Player, veh: alt.Vehicle, seat: number) => {
+    let data = {
+        vehicle: veh,
+        seat: seat,
+        name: veh.model,
+        event: 'Entered'
+    }
+    alt.emitClient(player, 'trcore:Client:VehicleInfo', data);
+})
+
+alt.on('playerLeftVehicle', (player: alt.Player, veh: alt.Vehicle, seat: number) => {
+    let data = {
+        vehicle: veh,
+        seat: seat,
+        name: veh.model,
+        event: 'Left'
+    }
+    alt.emitClient(player, 'trcore:Client:VehicleInfo', data);
+})
+
+alt.on('QBCore:Server:SpawnVehicle', (player: PlayerData, model: string) => SpwaningVehicle(player, model))
+alt.on('QBCore:Server:CreateVehicle', (player: PlayerData, model: string) => CreatingVehicle(player, model))
+
+export function SpwaningVehicle(player: PlayerData, model: string) {
+    SpwanVehicle(model, player)
+}
+
+export function CreatingVehicle(player: PlayerData, model: string) {
+    CreateVehicle(model, player)
+}
