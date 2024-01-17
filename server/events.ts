@@ -112,8 +112,8 @@ alt.on('playerLeftVehicle', (player: alt.Player, veh: alt.Vehicle, seat: number)
     alt.emitClient(player, 'trcore:Client:VehicleInfo', data);
 })
 
-alt.on('QBCore:Server:SpawnVehicle', (player: PlayerData, model: string) => SpwaningVehicle(player, model))
-alt.on('QBCore:Server:CreateVehicle', (player: PlayerData, model: string) => CreatingVehicle(player, model))
+alt.on('trcore:Server:SpwanVehicle', (player: PlayerData, model: string) => SpwaningVehicle(player, model))
+alt.on('trcore:Server:CreateVehicle', (player: PlayerData, model: string) => CreatingVehicle(player, model))
 
 export function SpwaningVehicle(player: PlayerData, model: string) {
     SpwanVehicle(model, player)

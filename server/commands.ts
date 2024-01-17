@@ -4,6 +4,8 @@
 import * as alt from 'alt-server';
 import * as chat from '../../chat/server/index.js';
 import { Permissions, PlayerData } from './player.js';
+import { Permission } from 'alt-shared';
+import { Player } from 'alt-client';
 
 
 
@@ -88,3 +90,101 @@ chat.registerCmd('tpm', (player: PlayerData) => {
     }
 })
 
+chat.registerCmd('togglepvp', (player: PlayerData) => {
+    if (player.permission >= Permissions.Admin) {
+        // togglepvp
+    }
+})
+
+chat.registerCmd('addpermission', (player: PlayerData, targetid: number, permission: number) => {
+    if (player.permission >= Permissions.God) {
+        let tagetplay: any = PlayerData.all.find(p => p.id == targetid)
+        tagetplay.permission = permission
+        alt.log('')
+    }
+})
+
+chat.registerCmd('removepermission', (player: PlayerData, targetid: number, permission: number) => {
+    if(player.permission >= Permissions.God) {
+    let tagetplay: any = PlayerData.all.find(p => p.id == targetid)
+    tagetplay.permission = Permissions.Player
+    alt.log('')
+}
+})
+
+// open & close
+
+
+chat.registerCmd('car', (player: PlayerData, model: string) => {
+    if (player.permission >= Permissions.Admin) {
+        alt.emit('trcore:Server:SpwanVehicle', player, model)
+    }
+})
+
+chat.registerCmd('dv', (player: PlayerData) => {
+    if (player.permission >= Permissions.Admin) {
+        player.vehicle?.destroy
+    }
+})
+
+chat.registerCmd('dvall', (player: PlayerData) => {
+    if (player.permission >= Permissions.Admin) {
+        alt.Vehicle.all.forEach(v => {v.destroy() })
+    }
+})
+
+chat.registerCmd('dvp', (player: PlayerData) => {
+    if (player.permission >= Permissions.Admin) {
+        alt.Ped.all.forEach(p => {p.destroy() })
+    }
+})
+
+chat.registerCmd('dvo', (player: PlayerData) => {
+    if (player.permission >= Permissions.Admin) {
+        alt.Object.all.forEach(o => {o.destroy() })
+    }
+})
+
+chat.registerCmd('givemoney', (player: PlayerData, moneytype: string, amount: number, reason: string[]) => {
+    if (player.permission >= Permissions.Admin) {
+        switch (moneytype) {
+            case "cash": {
+                player.AddMoney(moneytype, amount, reason.join(' '))
+                break
+            }
+            case "bank": {
+                player.AddMoney(moneytype, amount, reason.join(' '))
+                break
+            }
+            case "crypto": {
+                player.AddMoney(moneytype, amount, reason.join(' '))
+                break
+            }
+        }
+        
+    }
+})
+
+chat.registerCmd('setmoney', (player: PlayerData, moneytype: string, amount: number, reason: string[]) => {
+    if (player.permission >= Permissions.Admin) {
+        switch (moneytype) {
+            case "cash": {
+                player.SetMoney(moneytype, amount, reason.join(' '))
+                break
+            }
+            case "bank": {
+                player.SetMoney(moneytype, amount, reason.join(' '))
+                break
+            }
+            case "crypto": {
+                player.SetMoney(moneytype, amount, reason.join(' '))
+                break
+            }
+        }
+
+    }
+})
+
+chat.registerCmd('job', (player: PlayerData) => {
+    player.Job
+})
