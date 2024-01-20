@@ -89,3 +89,83 @@ export function DrawText3D(x: number, y: number, z: number, text: string) {
     native.drawRect(0.0, 0.0 + 0.0125, 0.017 + factor, 0.03, 0, 0, 0, 75, true);
     native.clearDrawOrigin();
 }
+
+/**
+ * Requests the animation dictionary with the given name to be loaded.
+ * 
+ * @param animDict - The name of the animation dictionary to load.
+ */
+export function RequestAnimDict(animDict: string) {
+    if (native.hasAnimDictLoaded(animDict)) { return }
+    native.requestAnimDict(animDict)
+}
+
+/**
+ * Plays an animation on the player ped.
+ * 
+ * @param animDict - The name of the animation dictionary to use.
+ * @param animName - The name of the animation to play.
+ * @param upperbodyOnly - Whether to only apply the animation to the upper body.
+ * @param duration - The duration in milliseconds to play the animation for. -1 for entire animation.
+ */
+export function PlayAnim(animDict: string, animName: string, upperbodyOnly: boolean, duration: number) {
+    let flag = upperbodyOnly && 16 || 0;
+    let runTime = duration || -1;
+    RequestAnimDict(animDict);
+    native.taskPlayAnim(native.playerPedId(), animDict, animName, 8.0, 1.0, runTime, flag, 0.0, false, false, true);
+    native.removeAnimDict(animDict);
+}
+
+/**
+ * Loads the model with the given hash if it is not already loaded.
+ * 
+ * @param model - The model hash to load.
+ */
+export function LoadModel(model: number) {
+    if (native.hasModelLoaded(model)) { return }
+    native.requestModel(model)
+}
+
+/**
+ * Loads the animation set with the given name if it is not already loaded.
+ * 
+ * @param animSet - The name of the animation set to load.
+ */
+export function LoadAnimSet(animSet: string) {
+    if (native.hasAnimSetLoaded(animSet)) { return }
+    native.requestAnimSet(animSet);
+} 
+
+/*alt.on('getNotifyConfig', (cb: any) => {
+    cb()
+})*/
+
+/**
+ * Displays a notification to the player.
+ * 
+ * @param text - The text content of the notification. Can be a string or object.
+ * @param caption - Optional caption text for the notification.
+ * @param texttype - The type/style of the notification. Default 'primary'.
+ * @param length - The duration in ms to display the notification. Default 5000. 
+ */
+export function Notify(text: string, caption?: string, texttype: string = 'primary', length: number = 5000) {
+    let message = {
+        action: 'notify',
+        type: texttype,
+        length: length,
+        text: text,
+        caption: caption
+
+    };
+
+    if (typeof text === 'object') {
+        message.text = text || 'Placeholder';
+        message.caption = caption || 'Placeholder';
+    } else {
+        message.text = text;
+    }
+
+    alt.emit('notify', message)
+}
+
+// Progressbar
