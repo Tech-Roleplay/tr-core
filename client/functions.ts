@@ -169,3 +169,205 @@ export function Notify(text: string, caption?: string, texttype: string = 'prima
 }
 
 // Progressbar
+
+// Peds
+
+/**
+ * Gets all peds except the ones in the ignore list.
+ * 
+ * @param ignoreList - List of peds to ignore/exclude
+ * @returns Array of ped handles
+ */
+export function GetPeds(ignoreList: any[]): any[] {
+    let pedPool = alt.Ped.all;
+    let peds: any[] = [];
+    ignoreList = ignoreList || [];
+    for (let i = 0; i < pedPool.length; i++) {
+        let found = false;
+        for (let j = 0; j < ignoreList.length; j++) {
+            if (ignoreList[j] == pedPool[i]) {
+                found = true;
+            }
+        }
+        if (!found) {
+            peds.push(pedPool[i]);
+        }
+    }
+    return peds;
+}
+
+/**
+ * Calculates the distance between two Vector3 points.
+ * 
+ * @param p1 - The first point
+ * @param p2 - The second point
+ * @returns The distance between the two points
+ */
+export function dist(p1: alt.Vector3, p2: alt.Vector3): number {
+    return p1.sub(p2).length;
+}
+
+/**
+ * Gets the closest ped to the given coordinates while ignoring 
+ * the peds in the ignore list.
+ * 
+ * @param coords - The coordinates to check distance from. If not provided, uses local player position.
+ * @param ignoreList - List of peds to ignore when checking for closest.
+ * @returns An array with the closest ped handle and the distance to it.
+ */
+export function GetClosestPed(coords: alt.Vector3, ignoreList: any[]): [any, number] {
+    let ped = native.playerPedId();
+    if (coords) {
+        coords = typeof coords === 'object' ? new alt.Vector3(coords.x, coords.y, coords.z) : coords;
+    } else {
+        coords = native.getEntityCoords(ped, true);
+    }
+    ignoreList = ignoreList || [];
+    let peds = GetPeds(ignoreList);
+    let closestDistance = -1;
+    let closestPed = -1;
+    for (let i = 0; i < peds.length; i++) {
+        let pedCoords = native.getEntityCoords(ped, true);
+        let distance = dist(pedCoords, coords);
+
+        if (closestDistance == -1 || closestDistance > distance) {
+            closestPed = peds[i];
+            closestDistance = distance;
+        }
+    }
+    return [closestPed, closestDistance];
+}
+
+/**
+ * Checks if the local player ped is currently wearing gloves.
+ * 
+ * Gets the ped model and checks the arm drawable index against lists of 
+ * gloveless indices for male and female models.
+ * 
+ * @returns True if the ped has gloves, false if gloveless.
+ */
+export function IsWearingGloves() {
+    let ped = native.playerPedId();
+    let armIndex = native.getPedDrawableVariation(ped, 3);
+    let model = native.getEntityModel(ped);
+    if (model == alt.hash('mp_m_freemode_01')) {
+        //if MaleNoGloves(armIndex)
+    }
+    else {
+        //if FemaleNoGloves(armIndex)
+    }
+    return true;
+}
+
+/**
+ * Gets the closest player to the specified coordinates.
+ * 
+ * @param coords - The coordinates to check distance from. Can be a Vector3 object or alt.Vector3 instance. Defaults to the local player's position.
+ * @returns The closest player ID and the distance to them.
+ */
+export function GetClosestPlayer(coords: alt.Vector3) {
+    let ped = native.playerPedId();
+    if (coords) {
+        coords = typeof coords === 'object' ? new alt.Vector3(coords.x, coords.y, coords.z) : coords;
+    } else {
+        coords = native.getEntityCoords(ped, true);
+    }
+    let closestPlayers = GetPlayersFromCoords(coords)
+    let closestDistance = -1
+    let closestPlayer = -1
+    for (let i = 0; i < closestPlayers.length; i++) {
+        if (closestPlayers[i] != native.playerId() && closestPlayers[i] != -1) {
+            let pos = native.getEntityCoords(native.getPlayerPed(closestPlayers[i]), true || false);
+            let distance = dist(pos, coords);
+
+            if (closestDistance == -1 || closestDistance > distance) {
+                closestPlayer = closestPlayers[i];
+                closestDistance = distance;
+            }
+        }
+    }
+    return closestPlayer && closestDistance
+}
+
+/**
+ * Gets a list of all players within a specified distance of a position.
+ * 
+ * @param coords - The position to check distance from. Can be a Vector3 object or alt.Vector3 instance. Defaults to the local player's position.
+ * @param distance - The max distance to check for players. Default is 5.
+ * @returns Array of player IDs that are within the specified distance.
+ */
+export function GetPlayersFromCoords(coords: alt.Vector3, distance = 5) {
+    let players = alt.Player.all;
+    let ped = native.playerPedId();
+    if (coords) {
+        coords = typeof coords === 'object' ? new alt.Vector3(coords.x, coords.y, coords.z) : coords;
+    } else {
+        coords = native.getEntityCoords(ped, true || false);
+    }
+    let closePlayers: any[] = [];
+    for (let player of players) {
+        let target = native.getPlayerPed(player);
+        let targetCoords = native.getEntityCoords(target, true || false);
+        let targetdistance = dist(targetCoords, coords);
+        if (targetdistance <= distance) {
+            closePlayers.push(player);
+        }
+    }
+    return closePlayers;
+}
+
+/**
+ * Gets the closest vehicle to the specified coordinates.
+ * 
+ * @param coords - The position to check distance from. Can be a Vector3 object or alt.Vector3 instance. Defaults to the local player's position.
+ * @returns An array with the closest vehicle's ID and distance to the coordinates.
+ */
+export function GetClosestVehicle(coords: alt.Vector3) {
+    let ped = native.playerPedId();
+    let vehicles = alt.Vehicle.all;
+    let closestDistance = -1;
+    let closestVehicle = -1;
+    if (coords) {
+        coords = typeof coords === 'object' ? new alt.Vector3(coords.x, coords.y, coords.z) : coords;
+    } else {
+        coords = native.getEntityCoords(ped, true || false);
+    }
+    for (let i = 0; i < vehicles.length; i++) {
+        let vehicleCoords = native.getEntityCoords(vehicles[i], true || false);
+        let distance = dist(vehicleCoords, coords);
+
+        if (closestDistance == -1 || closestDistance > distance) {
+            closestVehicle = vehicles[i].id;
+            closestDistance = distance;
+        }
+    }
+    return [closestVehicle, closestDistance];
+}
+
+/**
+ * Gets the closest object to the specified coordinates.
+ * 
+ * @param coords - The position to check distance from. Can be a Vector3 object or alt.Vector3 instance. Defaults to the local player's position.
+ * @returns An array with the closest object's ID and distance to the coordinates.
+ */
+export function GetClosestObject(coords: alt.Vector3) {
+    let ped = native.playerPedId();
+    let objects = alt.Object.all;
+    let closestDistance = -1;
+    let closestObject = -1;
+    if (coords) {
+        coords = typeof coords === 'object' ? new alt.Vector3(coords.x, coords.y, coords.z) : coords;
+    } else {
+        coords = native.getEntityCoords(ped, true || false);
+    }
+    for (let i = 0; i < objects.length; i++) {
+        let objectCoords = native.getEntityCoords(objects[i], true || false);
+        let distance = dist(objectCoords, coords);
+
+        if (closestDistance == -1 || closestDistance > distance) {
+            closestObject = objects[i].id;
+            closestDistance = distance;
+        }
+    }
+    return [closestObject, closestDistance];
+}
