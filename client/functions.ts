@@ -4,6 +4,7 @@
 import * as alt from 'alt-client';
 import * as native from 'natives';
 import { PlayerData } from "./../server/player.js";
+import { RadioStation } from 'alt-server';
 
 
 /**
@@ -370,4 +371,97 @@ export function GetClosestObject(coords: alt.Vector3) {
         }
     }
     return [closestObject, closestDistance];
+}
+
+/**
+ * Attaches a prop to a ped bone.
+ *
+ * @param ped - The ped to attach the prop to.
+ * @param model - The model name of the prop. 
+ * @param boneId - The bone ID to attach to.
+ * @param x - The position offset on the X axis.
+ * @param y - The position offset on the Y axis.  
+ * @param z - The position offset on the Z axis.
+ * @param xR - The rotation offset on the X axis.
+ * @param yR - The rotation offset on the Y axis.
+ * @param zR - The rotation offset on the Z axis.
+ * @param vertex - Whether to use vertex positioning.  
+ * @returns The created prop object.
+ */
+export function AttachProp(ped: alt.Ped, model: string, boneId: number, x: number, y: number, z: number, xR: number, yR: number, zR: number, vertex: number) {
+    let modelHash: number = alt.hash(model);
+    let bone = native.getPedBoneIndex(ped.id, boneId);
+    LoadModel(modelHash);
+    let prop = native.createObject(modelHash, 1.0, 1.0, 1.0, true, true, false)
+    native.attachEntityToEntity(prop, ped, bone, x, y, z, xR, yR, zR, true, true, false, true, !vertex && 2 || 0, true, false);
+    native.setModelAsNoLongerNeeded(modelHash);
+    return prop
+}
+
+/**
+ * Spawns a vehicle model at the given coordinates or player's position.
+ * 
+ * @param model - The vehicle model name hash or string
+ * @param cb - Optional callback function when vehicle is spawned 
+ * @param coords - Optional coordinates to spawn at
+ * @param isNetworked - Whether the vehicle should be networked
+ * @param teleportInto - Whether to teleport the player into the vehicle
+ * @returns The spawned vehicle
+ */
+export function SpwanVehicle(model: string, cb: any, coords: alt.Vector3, isNetworked: boolean, teleportInto: boolean) {
+    let ped = native.playerPedId()
+    let modelHash: number = alt.hash(model)
+    if (!native.isModelInCdimage(modelHash)) { return }
+    if (coords) {
+        coords = typeof coords === 'object' ? new alt.Vector3(coords.x, coords.y, coords.z) : coords;
+    } else {
+        coords = native.getEntityCoords(ped, true || false);
+    }
+    LoadModel(modelHash);
+    let veh = native.createVehicle(modelHash, coords.x, coords.y, coords.z, alt.Player.local.headRot.x, isNetworked, false, true);
+    let netid = native.networkGetNetworkIdFromEntity(veh);
+    native.setVehicleHasBeenOwnedByPlayer(veh, true);
+    native.setNetworkIdCanMigrate(netid, true);
+    native.setVehicleNeedsToBeHotwired(veh, false);
+    native.setVehRadioStation(veh, "OFF");
+    //native.setVehicleFuelLevel(veg, 100.0);
+    native.setModelAsNoLongerNeeded(modelHash);
+    if (teleportInto) {
+        native.taskWarpPedIntoVehicle(native.playerPedId(), veh, -1)
+    }
+    if (cb) { cb(veh) }
+}
+
+/**
+ * Deletes the given vehicle.
+ * 
+ * Sets the vehicle as a mission entity and deletes it.
+ * 
+ * @param vehicle - The vehicle to delete 
+ */
+export function DeleteVehicle(vehicle: alt.Vehicle) {
+    native.setEntityAsMissionEntity(vehicle, true, true);
+    native.deleteVehicle(vehicle);
+}
+
+/**
+ * Gets the license plate text of the given vehicle.
+ * 
+ * @param vehicle - The vehicle to get the plate text of
+ * @returns The license plate text, or undefined if invalid vehicle
+ */
+export function GetPlate(vehicle: alt.Vehicle) {
+    if (vehicle == null) { return null }
+    return (native.getVehicleNumberPlateText(vehicle))
+}
+
+/**
+ * Gets the vehicle label text for the given vehicle.
+ * 
+ * @param vehicle - The vehicle to get the label text for
+ * @returns The vehicle label text, or undefined if invalid vehicle
+ */
+export function GetVehicleLabe(vehicle: alt.Vehicle) {
+    if (vehicle == null) { return null}
+    return //GetLabelText(native.getDisplayNameFromVehicleModel(native.getEntityModel(vehicle)))
 }
