@@ -431,7 +431,7 @@ class PlayerData extends alt.Player {
         this.metadata.walletid = cardnumber;
     }
 
-    /**
+    /** 
      * Gets the index of the player's credit card in their inventory
      * that matches the provided card number and type.
      * @param cardnumber - The credit card number to search for
@@ -440,7 +440,7 @@ class PlayerData extends alt.Player {
     GetCardSlot(cardnumber: string, cardtype: string) {
         cardtype = cardtype.toLowerCase();
         // Inventory Func
-    }
+    } 
 
     /**
      * Saves the player's data to the database.
@@ -727,12 +727,22 @@ function GetMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto')) {
     }
 }
 
+/**
+ * Sets the credit card number for the given player by storing it in a 'walletid' meta field.
+ *  
+ * @param player - The player to set the credit card number for.
+ * @param cardnumber - The credit card number to set.
+ */
 function SetCreditCard(player: alt.Player, cardnumber: string) {
-   player.setMeta('walletid', cardnumber);
+    player.setMeta('walletid', cardnumber);
 }
 
 function GetCardSlot(player: alt.Player, cardtype:string) {
+    // TODO: get inventory slot func
+}
 
+function SavePlayer(player: alt.Player) {
+    // TODO: save logic
 }
 
 /**
@@ -740,7 +750,6 @@ function GetCardSlot(player: alt.Player, cardtype:string) {
  */
 export {
     PlayerData,
-    SavePlayerData,
     setJob,
     ResetJob,
     SetGang,
@@ -748,5 +757,8 @@ export {
     AddMoney,
     RemoveMoney,
     SetMoney,
-    GetMoney
+    GetMoney,
+    SetCreditCard,
+    GetCardSlot,
+    SavePlayer
 }
