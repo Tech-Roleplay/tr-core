@@ -727,6 +727,14 @@ function GetMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto')) {
     }
 }
 
+function SetCreditCard(player: alt.Player, cardnumber: string) {
+   player.setMeta('walletid', cardnumber);
+}
+
+function GetCardSlot(player: alt.Player, cardtype:string) {
+
+}
+
 /**
  * Exports the PlayerData class.
  */
