@@ -672,6 +672,26 @@ function RemoveMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto')
     alt.emitClient(player, 'trcore:client:UpdateMoney', moneytype, amount, "remove", reason);
 }
 
+function SetMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto'), amount: number, reason:string){
+    if (moneytype == 'cash') {
+        player.deleteMeta('money:cash');
+        player.setMeta('money:cash', amount);
+        alt.log(`[Money] Set ${amount} cash to ${player.name} (${reason}).`);
+    } else if (moneytype == 'bank') {
+        player.deleteMeta('money:bank');
+        player.setMeta('money:bank', amount);
+        alt.log(`[Money] Set ${amount} bank to ${player.name} (${reason}).`);
+    } else if (moneytype == 'crypto') {
+        player.deleteMeta('money:crypto');
+        player.setMeta('money:crypto', amount);
+        alt.log(`[Money] Set ${amount} crypto to ${player.name} (${reason}).`);
+    } else {
+        return;
+    }
+    alt.emit('hud:client:UpdateMoney', player, moneytype, amount, false);
+    alt.emit('trcore:client:UpdateMoney', player, moneytype, amount, "set", reason);
+}
+
 
 /**
  * Gets the specified type of money for the given player.
@@ -719,5 +739,6 @@ export {
     ResetGang,
     AddMoney,
     RemoveMoney,
+    SetMoney,
     GetMoney
 }
