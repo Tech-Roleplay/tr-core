@@ -34,31 +34,32 @@ export function GetIdentifier(player: alt.Player) {
 * @param: identifier: Player's discord identifier
 */
 export function GetPlayer(identifier: string) {
-    let player = PlayerData.all.find(p => p.discordID == identifier);
+    let player = alt.Player.all.find(p => p.discordID == identifier);
     return player;
 }
 
 
 
 /**
- * Gets a player by their citizen ID.
+ * Gets a player by their char ID.
  * 
- * @param citizenid The citizen ID to search for.
- * @returns The player with the matching citizen ID, if found.
+ * @param charid The char ID to search for.
+ * @returns The player with the matching char ID, if found.
  */
-export function GetPlayerByCitzenID(citizenid: string) {
-    let player = PlayerData.all.find(p => p.citizenid == citizenid);
+export function GetPlayerByCitzenID(charid: string) {
+    let player = alt.Player.all.find(p => p.getMeta('charid') == charid);
     return player;
 }
 
+
 /**
- * Gets an offline player by their citizen ID.
+ * Gets an offline player by their character ID.
  * 
- * @param citizenid The citizen ID of the player to find.
- * @returns The offline player with the matching citizen ID if found, otherwise null.
+ * @param charid The character ID to search for. 
+ * @returns The offline player with the matching character ID, if found.
  */
-export function GetOfflinePlayerByCititzenId(citizenid: string) {
-    let player = PlayerData.all.find(p => p.citizenid == citizenid);
+export function GetOfflinePlayerByCititzenId(charid: string) {
+    let player = alt.Player.all.find(p => p.getMeta('charid') == charid);
     if (player && player.ping >= 0) {
         return player;
     }
@@ -72,52 +73,55 @@ export function GetOfflinePlayerByCititzenId(citizenid: string) {
  * @returns The player with the matching phone number, if found.
 */
 export function GetPlayerByPhone(number: number) {
-    let player = PlayerData.all.find(p => p.charinfo.phone == number);
+    let player = alt.Player.all.find(p => p.getMeta('phonenumber') == number);
     return player;
 }
 
 
 /**
- * Gets all player data objects.
- * 
- * @returns Array of all PlayerData objects.
+ * Returns all currently connected players.
+ * @returns An array of all currently connected players.
  */
 export function GetPlayers() {
-    let players = PlayerData.all;
+    let players = alt.Player.all;
     return players;
 }
 
+
 /**
- * Gets all players that are currently on duty for the specified job.
+ * Returns all currently connected players that are on duty for the specified job.
  * 
- * @param job - The job to check for on-duty players.
- * @returns Array of PlayerData for players on duty for the job.
+ * @param jobname The name of the job to filter for.
+ * @returns An array of players on duty for the specified job.
  */
-export function GetPlayersOnDuty(job: string) {
-    let players = PlayerData.all.filter(p => p.Job.jobonduty == true);
+export function GetPlayersOnDuty(jobname: string) {
+    let players = alt.Player.all.filter(p => p.getMeta('job:onduty') == true);
     return players;
 }
 
 
+
 /**
- * Gets the number of players currently on duty for the specified job.
+ * Returns the number of players currently on duty for the specified job.
  * 
- * @param job - The job to count on-duty players for.
+ * @param jobname The name of the job to count players for.
  * @returns The number of players currently on duty for the job.
  */
-export function GetDutyCount(job: string) {
-    let players = PlayerData.all.filter(p => p.Job.jobonduty == true);
+export function GetDutyCount(jobname: string) {
+    let players = alt.Player.all.filter(p => p.getMeta('job:onduty') == true);
     return players.length;
 }
 
+
 /**
- * Spawns a new vehicle for the player and doesn't remove the player's current vehicle.
+ * Spawns a vehicle at the player's position and don't replace the current vehicle.
+ * Like vehicle stacking.
  * 
- * @param model - The model name of the vehicle to spawn.
- * @param player - The player to spawn the vehicle for.
- * @returns The spawned vehicle instance.
+ * @param model The model name of the vehicle to spawn.
+ * @param player The player to spawn the vehicle for.
+ * @returns The spawned vehicle.
  */
-export function SpwanVehicle(model: string, player: PlayerData) {
+export function SpwanVehicle(model: string, player: alt.Player) {
     let vehicle = new alt.Vehicle(model, player.pos, player.rot);
     player.setIntoVehicle(vehicle, 1);
     vehicle.setNetOwner(player);
@@ -131,7 +135,7 @@ export function SpwanVehicle(model: string, player: PlayerData) {
  * @param player - The player to spawn the vehicle for.
  * @returns The spawned vehicle instance.
  */
-export function CreateVehicle(model: string, player: PlayerData) {
+export function CreateVehicle(model: string, player: alt.Player) {
     if (player.vehicle) {
         player.vehicle.destroy();
     }
@@ -148,9 +152,9 @@ export function CreateVehicle(model: string, player: PlayerData) {
  * @param player - The player to give the paycheck to. 
  * @param payment - The amount of each paycheck.
  */
-function PaycheckInterval(player: PlayerData, payment: number) {
+function PaycheckInterval(player: alt.Player, payment: number) {
     var paycheck = () => {
-        player.AddMoney("bank", payment, "Paycheck: " + payment + "$")
+        //AddMoney("bank", payment, "Paycheck: " + payment + "$")
     };
     alt.setInterval(paycheck, 9000000);
     return;

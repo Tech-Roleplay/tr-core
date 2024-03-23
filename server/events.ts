@@ -5,13 +5,13 @@ import { Permissions, PlayerData } from './player.js';
 import { CreateVehicle, GetIdentifier, SpwanVehicle } from './functions.js';
 import * as config from './../config.js';
 
-alt.on('playerDropped', (player: PlayerData, reason: string) => {
+alt.on('playerDropped', (player: alt.Player, reason: string) => {
     alt.emit('qb-log:server:CreateLog', 'joinleave', 'Dropped', `${player.name}(${player.discordID}) left. \nReason: ${reason}`);
-    player.Save();
+    //player.Save();
     player.destroy();
 })
 
-function onPlayerConnect(player: PlayerData) {
+function onPlayerConnect(player: alt.Player) {
     let identifier = GetIdentifier(player)
     if (config.ServerClosed) {
         player.kick(config.ServerClosedReason);
@@ -39,10 +39,7 @@ alt.on('playerConnect', (player: alt.Player) => {
     if (identifier.length > 0) {
         player.kick('error.no_valid_discord_id');
         return;
-    } else if (config.CheckDuplicateDiscordID) {
-        player.kick('error.duplicate_discord_id');
-        return;
-    }
+    } 
 
     // Rest of your logic here
 });
@@ -52,12 +49,7 @@ alt.on('playerConnect', (player: alt.Player) => {
 alt.on('trcore:Server:CloseServer', (player: PlayerData, reason: string) => {
     if (player.permission >= Permissions.God) {
         alt.log(`[tr-core] Server closed by ${player.name}(${player.discordID}) for reason: ${reason}`);
-
-        
-        // set serverclose to true, but is not funtional
-        //config.ServerClosed = true;
-        //config.ServerCloseReason = true;
-
+// change to db
 
     }
 })
@@ -112,13 +104,13 @@ alt.on('playerLeftVehicle', (player: alt.Player, veh: alt.Vehicle, seat: number)
     alt.emitClient(player, 'trcore:Client:VehicleInfo', data);
 })
 
-alt.on('trcore:Server:SpwanVehicle', (player: PlayerData, model: string) => SpwaningVehicle(player, model))
-alt.on('trcore:Server:CreateVehicle', (player: PlayerData, model: string) => CreatingVehicle(player, model))
+alt.on('trcore:Server:SpwanVehicle', (player: alt.Player, model: string) => SpwaningVehicle(player, model))
+alt.on('trcore:Server:CreateVehicle', (player: alt.Player, model: string) => CreatingVehicle(player, model))
 
-export function SpwaningVehicle(player: PlayerData, model: string) {
+export function SpwaningVehicle(player: alt.Player, model: string) {
     SpwanVehicle(model, player)
 }
 
-export function CreatingVehicle(player: PlayerData, model: string) {
+export function CreatingVehicle(player: alt.Player, model: string) {
     CreateVehicle(model, player)
 }
