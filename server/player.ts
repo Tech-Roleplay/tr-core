@@ -595,7 +595,7 @@ function ResetGang(player: alt.Player) {
  */
 function AddMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto'), amount: number, reason: string) {
     if (moneytype == 'cash') {
-        let cash = player.getMeta<number>('money:cash');
+        let cash = player.getMeta('money:cash') as number;
         if (cash !== undefined) {
             cash += amount;
         } else {
@@ -604,7 +604,7 @@ function AddMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto'), a
         player.setMeta('money:cash', cash);
         alt.log(`[Money] Added ${amount} cash to ${player.name} (${reason}). New balance is ${cash}.`);
     } else if (moneytype == 'bank') {
-        let bank = player.getMeta<number>('money:bank');
+        let bank = player.getMeta('money:bank') as number;
         if (bank !== undefined) {
             bank += amount;
         } else {
@@ -613,7 +613,7 @@ function AddMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto'), a
         player.setMeta('money:bank', bank);
         alt.log(`[Money] Added ${amount} bank to ${player.name} (${reason}). New balance is ${bank}.`);
     } else if (moneytype == 'crypto') {
-        let crypto = player.getMeta<number>('money:crypto');
+        let crypto = player.getMeta('money:crypto') as number;
         if (crypto !== undefined) {
             crypto += amount;
         } else {
@@ -639,7 +639,7 @@ function AddMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto'), a
  */
 function RemoveMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto'), amount: number, reason: string) {
     if (moneytype == 'cash') {
-        let cash = player.getMeta<number>('money:cash');
+        let cash = player.getMeta('money:cash') as number;
         if (cash !== undefined) {
             cash -= amount;
         } else {
@@ -648,7 +648,7 @@ function RemoveMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto')
         player.setMeta('money:cash', cash);
         alt.log(`[Money] Remove ${amount} cash to ${player.name} (${reason}). New balance is ${cash}.`);
     } else if (moneytype == 'bank') {
-        let bank = player.getMeta<number>('money:bank');
+        let bank = player.getMeta('money:bank') as number;
         if (bank !== undefined) {
             bank -= amount;
         } else {
@@ -657,7 +657,7 @@ function RemoveMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto')
         player.setMeta('money:bank', bank);
         alt.log(`[Money] Remove ${amount} bank to ${player.name} (${reason}). New balance is ${bank}.`);
     } else if (moneytype == 'crypto') {
-        let crypto = player.getMeta<number>('money:crypto');
+        let crypto = player.getMeta('money:crypto') as number;
         if (crypto !== undefined) {
             crypto -= amount;
         } else {
@@ -702,28 +702,28 @@ function SetMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto'), a
  */
 function GetMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto')) {
     if (moneytype == 'cash') {
-        let cash = player.getMeta<number>('money:cash');
+        let cash = player.getMeta('money:cash') as number;
         if (cash !== undefined) {
             return cash;
         } else {
-            return 0;
+            return;
         }
     } else if (moneytype == 'bank') {
-        let bank = player.getMeta<number>('money:bank');
+        let bank = player.getMeta('money:bank') as number;
         if (bank !== undefined) {
             return bank;
         } else {
-            return 0;
+            return;
         }
     } else if (moneytype == 'crypto') {
-        let crypto = player.getMeta<number>('money:crypto');
+        let crypto = player.getMeta('money:crypto') as number;
         if (crypto !== undefined) {
             return crypto;
         } else {
-            return 0;
+            return;
         }
     } else {
-        return 0;
+        return;
     }
 }
 

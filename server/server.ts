@@ -28,13 +28,14 @@ alt.on('resourceStart', () => {
 })
 
 
-alt.on('player:create', (player: PlayerData, citizenid: number) => {
+alt.on('player:create', (player: alt.Player, charid: number) => {
     if (player) {
         let license = GetIdentifier(player);
         
         alt.emitClient(player, 'player:create', license);
     }
 });
+
 
 
 
