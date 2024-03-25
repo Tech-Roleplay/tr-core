@@ -3,9 +3,9 @@
 
 import * as alt from 'alt-server';
 import * as chat from '../../chat/server/index.js';
-import { HasPlayerPermission, Permissions, AddMoney} from './player.js';
+import { HasPlayerPermission, Permissions, AddMoney, RemoveMoney, SetMoney, GetMoney, GetJob, setJob, ResetJob, SetGang, ResetGang, GetGang} from './player.js';
 import { Permission } from 'alt-shared';
-import { Player } from 'alt-client';
+
 
 
 
@@ -29,12 +29,12 @@ import { Player } from 'alt-client';
      * @param callback - The function to call when the command is run
      * @param permission - The minimum permission level required to run this command
     */
-export function addCommand(Player: PlayerData, commandname: string, desc: string, parameters: { name: string, description: string }, argsrequired: boolean, permission: number, callback: () => void) {
+export function addCommand(player: alt.Player, commandname: string, desc: string, parameters: { name: string, description: string }, argsrequired: boolean, permission: number, callback: () => void) {
 
 
 
     // Check player permission
-    if (Player.permission >= permission) {
+    if (HasPlayerPermission(player, permission)) {
 
         // Register the command and suggestion
         chat.registerCmd(commandname, callback);
@@ -71,7 +71,7 @@ chat.registerCmd('tp', (player: alt.Player, x: number, y: number, z: number) => 
     if (HasPlayerPermission(player, Permissions.Admin)) {
         if (x && !y && !z) {
             let target = x
-            let tagetplay: any = Player.all.find(p => p.id == target)
+            let tagetplay: any = alt.Player.all.find(p => p.id == target)
             player.pos = tagetplay.pos;
         }
         if (x && y && z) {
@@ -98,7 +98,7 @@ chat.registerCmd('togglepvp', (player: alt.Player) => {
 
 chat.registerCmd('addpermission', (player: alt.Player, targetid: number, permission: number) => {
     if (HasPlayerPermission(player, Permissions.God)) {
-        let tagetplay: any = Player.all.find(p => p.id == targetid)
+        let tagetplay: any = alt.Player.all.find(p => p.id == targetid)
         tagetplay.permission = permission
         alt.log('')
     }
@@ -106,7 +106,7 @@ chat.registerCmd('addpermission', (player: alt.Player, targetid: number, permiss
 
 chat.registerCmd('removepermission', (player: alt.Player, targetid: number, permission: number) => {
     if(HasPlayerPermission(player, Permissions.God)) {
-    let tagetplay: any = Player.all.find(p => p.id == targetid)
+    let tagetplay: any = alt.Player.all.find(p => p.id == targetid)
     tagetplay.permission = Permissions.Player
     alt.log('')
 }
@@ -149,11 +149,11 @@ chat.registerCmd('givemoney', (player: alt.Player, moneytype: string, amount: nu
     if (HasPlayerPermission(player, Permissions.Admin)) {
         switch (moneytype) {
             case "cash": {
-                AddMoney(moneytype, amount, reason.join(' '))
+                AddMoney(player, moneytype, amount, reason.join(' '))
                 break
             }
             case "bank": {
-                AddMoney(moneytype, amount, reason.join(' '))
+                AddMoney(player, moneytype, amount, reason.join(' '))
                 break
             }
             case "crypto": {
@@ -165,19 +165,19 @@ chat.registerCmd('givemoney', (player: alt.Player, moneytype: string, amount: nu
     }
 })
 
-chat.registerCmd('setmoney', (player: PlayerData, moneytype: string, amount: number, reason: string[]) => {
-    if (player.permission >= Permissions.Admin) {
+chat.registerCmd('setmoney', (player: alt.Player, moneytype: string, amount: number, reason: string[]) => {
+    if (HasPlayerPermission(player, Permissions.Admin)) {
         switch (moneytype) {
             case "cash": {
-                player.SetMoney(moneytype, amount, reason.join(' '))
+                SetMoney(player, moneytype, amount, reason.join(' '))
                 break
             }
             case "bank": {
-                player.SetMoney(moneytype, amount, reason.join(' '))
+                SetMoney(player, moneytype, amount, reason.join(' '))
                 break
             }
             case "crypto": {
-                player.SetMoney(moneytype, amount, reason.join(' '))
+                SetMoney(player, moneytype, amount, reason.join(' '))
                 break
             }
         }
@@ -185,6 +185,7 @@ chat.registerCmd('setmoney', (player: PlayerData, moneytype: string, amount: num
     }
 })
 
-chat.registerCmd('job', (player: PlayerData) => {
-    player.Job
+chat.registerCmd('job', (player: alt.Player) => {
+    let Job = GetJob(player);
+    chat.send(player, `Your current job is ${Job.label} as ${Job.gradename}`);
 })
