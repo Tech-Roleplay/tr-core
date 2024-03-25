@@ -745,7 +745,15 @@ function RemoveMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto')
     alt.emitClient(player, 'trcore:client:UpdateMoney', moneytype, amount, "remove", reason);
 }
 
-function SetMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto'), amount: number, reason:string){
+/**
+ * Sets the specified amount of money for the given player's balance.
+ * 
+ * @param player - The player to set the money for. 
+ * @param moneytype - The type of money to set ('cash', 'bank', 'crypto').
+ * @param amount - The amount of money to set.
+ * @param reason - The reason for setting the money.
+ */
+function SetMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto'), amount: number, reason: string) {
     if (moneytype == 'cash') {
         player.deleteMeta('money:cash');
         player.setMeta('money:cash', amount);
