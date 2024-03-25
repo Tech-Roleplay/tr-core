@@ -512,6 +512,22 @@ function SavePlayerData(player: PlayerData) {
 }
 
 /**
+ * Checks if a player has a specific permission level.
+ * 
+ * @param player - The player to check permissions for.
+ * @param permission - The permission level to check.
+ * @returns True if the player has the specified permission, false otherwise.
+ */
+function HasPlayerPermission(player: alt.Player, permission: Permissions) {
+    let perms = player.getMeta('permissions') as number;
+    if (perms >= permission) {
+        return true;
+    } else {
+        return false;
+    }
+}
+
+/**
  * Sets the job for the given player.
  *
  * @param player - The player to set the job for.
@@ -839,6 +855,7 @@ function SavePlayer(player: alt.Player) {
  * - Saving player data
  */
 export {
+    HasPlayerPermission,
     setJob,
     ResetJob,
     GetJob,
