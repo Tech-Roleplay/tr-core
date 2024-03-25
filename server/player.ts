@@ -554,6 +554,58 @@ function ResetJob(player: alt.Player) {
 }
 
 /**
+ * Gets the current job details for the given player.
+ * 
+ * Retrieves the job metadata fields from the player and returns them
+ * in a job details object.
+ * 
+ * @param player - The player to get the job details for.
+ * @returns The job details object containing the name, label, payment, 
+ * type, onduty status, boss status, grade name and level.
+ */
+function GetJob(player: alt.Player) {
+    let jobname = player.getMeta('job:name') as string;
+    let joblabel = player.getMeta('job:label') as string;
+    let jobpayment = player.getMeta('job:payment') as number;
+    let jobtype = player.getMeta('job:type') as string;
+    let jobonduty = player.getMeta('job:onduty') as boolean;
+    let jobisboss = player.getMeta('job:isboss') as boolean;
+    let jobgradename = player.getMeta('job:gradename') as string;
+    let jobgradelevel = player.getMeta('job:gradelevel') as number;
+    return {
+        name: jobname,
+        label: joblabel,
+        payment: jobpayment,
+        type: jobtype,
+        onduty: jobonduty,
+        isboss: jobisboss,
+        gradename: jobgradename,
+        gradelevel: jobgradelevel
+    }
+}
+
+/**
+ * Toggles the on/off duty status for the given player.
+ * 
+ * Gets the current onduty status from the player's job metadata.
+ * 
+ * If they are currently onduty, sets it to false.
+ * If they are currently offduty, sets it to true.
+ * 
+ * @param player - The player to toggle the duty status for.
+ * 
+ */
+function ToggleDuty(player: alt.Player) {
+    let jobonduty = player.getMeta('job:onduty');
+    if (jobonduty) {
+        player.setMeta('job:onduty', false);
+    }
+    else {
+        player.setMeta('job:onduty', true);
+    }
+}
+
+/**
  * Sets the gang for the given player.
  * 
  * @param player - The player to set the gang for
@@ -583,6 +635,27 @@ function ResetGang(player: alt.Player) {
     player.setMeta('gang:isboss', false);
     player.setMeta('gang:gradename', '');
     player.setMeta('gang:gradelevel', 0);
+}
+
+/**
+ * Gets the current gang metadata for the given player.
+ * 
+ * @param player - The player to get the gang metadata for
+ * @returns Object containing the player's current gang name, label, boss status, grade name and level
+ */
+function GetGang(player: alt.Player) {
+    let gangname = player.getMeta('gang:name') as string;
+    let ganglabel = player.getMeta('gang:label') as string;
+    let gangisboss = player.getMeta('gang:isboss') as boolean;
+    let ganggradename = player.getMeta('gang:gradename') as string;
+    let ganggradelevel = player.getMeta('gang:gradelevel') as number;
+    return {
+        name: gangname,
+        label: ganglabel,
+        isboss: gangisboss,
+        gradename: ganggradename,
+        gradelevel: ganggradelevel
+    }
 }
 
 /**
@@ -745,15 +818,26 @@ function SavePlayer(player: alt.Player) {
     // TODO: save logic
 }
 
+
 /**
- * Exports the PlayerData class.
+ * Exports player utility functions from the player module.
+ * 
+ * Includes functions for:
+ * - Setting and getting a player's job
+ * - Setting and getting a player's gang 
+ * - Adding/removing player money
+ * - Setting a player's credit card number
+ * - Getting a player's inventory card slots
+ * - Saving player data
  */
 export {
-    PlayerData,
     setJob,
     ResetJob,
+    GetJob,
+    ToggleDuty,
     SetGang,
     ResetGang,
+    GetGang,
     AddMoney,
     RemoveMoney,
     SetMoney,
