@@ -825,6 +825,32 @@ function GetMoney(player: alt.Player, moneytype: ('cash' | 'bank' | 'crypto')) {
 }
 
 /**
+ * Gets the gender of the given player.
+ * 
+ * @param player - The player to get the gender for.
+ * @returns The gender of the player, or undefined if not set.
+ */
+function GetPlayerGender(player: alt.Player) {
+    let gender = player.getMeta('gender') as string;
+    if (gender !== undefined) {
+        return gender;
+    } else {
+        return;
+    }
+
+}
+
+/**
+ * Sets the gender for the given player.
+ *
+ * @param player - The player to set the gender for.
+ * @param gender - The gender to set.
+ */
+function SetPlayerGender(player: alt.Player, gender: Gender) {
+    player.setMeta('gender', gender);
+}
+
+/**
  * Sets the credit card number for the given player by storing it in a 'walletid' meta field.
  *  
  * @param player - The player to set the credit card number for.
@@ -867,6 +893,8 @@ export {
     RemoveMoney,
     SetMoney,
     GetMoney,
+    GetPlayerGender,
+    SetPlayerGender,
     SetCreditCard,
     GetCardSlot,
     SavePlayer
