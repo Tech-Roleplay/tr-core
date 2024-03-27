@@ -1,7 +1,7 @@
 /// <reference types="@altv/types-server" />
 
 import * as alt from 'alt-server';
-import { PlayerData } from './player.js';
+import {  } from './player.js';
 import { GetIdentifier } from './functions.js';
 import { sv_version } from './../config.js';
 

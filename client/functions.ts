@@ -3,7 +3,7 @@
 
 import * as alt from 'alt-client';
 import * as native from 'natives';
-import { PlayerData } from "./../server/player.js";
+import {  } from "./../server/player.js";
 import { RadioStation } from 'alt-server';
 
 

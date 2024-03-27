@@ -1,7 +1,7 @@
 /// <reference types="@altv/types-server" />
 
 import * as alt from 'alt-server';
-import { Permissions, PlayerData } from './player.js';
+import { HasPlayerPermission, Permissions, } from './player.js';
 import { CreateVehicle, GetIdentifier, SpwanVehicle } from './functions.js';
 import * as config from './../config.js';
 
@@ -46,15 +46,15 @@ alt.on('playerConnect', (player: alt.Player) => {
 
 
 
-alt.on('trcore:Server:CloseServer', (player: PlayerData, reason: string) => {
-    if (player.permission >= Permissions.God) {
+alt.on('trcore:Server:CloseServer', (player: alt.Player, reason: string) => {
+    if (HasPlayerPermission(player, Permissions.God)) {
         alt.log(`[tr-core] Server closed by ${player.name}(${player.discordID}) for reason: ${reason}`);
 // change to db
 
     }
 })
 
-alt.on('trcore:Server:OpenServer', (player: PlayerData) => {
+alt.on('trcore:Server:OpenServer', (player: PlayerDaltata) => {
     if (player.permission >= Permissions.God) {
         alt.log(`[tr-core] Server open by ${player.name}(${player.discordID})`)
     }
