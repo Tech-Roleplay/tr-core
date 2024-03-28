@@ -1,7 +1,7 @@
 /// <reference types="@altv/types-server" />
 
 import * as alt from 'alt-server';
-import { HasPlayerPermission, Permissions, } from './player.js';
+import { HasPlayerPermission, Permissions, ToggleDuty, } from './player.js';
 import { CreateVehicle, GetIdentifier, SpwanVehicle } from './functions.js';
 import * as config from './../config.js';
 
@@ -54,24 +54,20 @@ alt.on('trcore:Server:CloseServer', (player: alt.Player, reason: string) => {
     }
 })
 
-alt.on('trcore:Server:OpenServer', (player: PlayerDaltata) => {
-    if (player.permission >= Permissions.God) {
+alt.on('trcore:Server:OpenServer', (player: alt.Player) => {
+    if (HasPlayerPermission(player, Permissions.God)) {
         alt.log(`[tr-core] Server open by ${player.name}(${player.discordID})`)
     }
 })
 
-alt.on('trcore:UpdatePlayer', (player: PlayerData) => {
+alt.on('trcore:UpdatePlayer', (player: alt.Player) => {
     if (!player) return;
 
 
 })
 
-alt.on('trcore:ToggleDuty', (player: PlayerData) => {
-    if (player.Job.jobonduty) {
-        player.Job.jobonduty = false
-    } else {
-        player.Job.jobonduty = true
-    }
+alt.on('trcore:ToggleDuty', (player: alt.Player) => {
+    ToggleDuty(player);
 })
 
 alt.on('playerEnteringVehicle', (player: alt.Player, veh: alt.Vehicle, seat: number) => {
