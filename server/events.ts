@@ -19,10 +19,10 @@ function onPlayerConnect(player: alt.Player) {
     }
 
     if (identifier.length > 0) {
-        player.kick(('error.no_valid_discord_id'));
+        player.kick(('No valid discord id'));
         return;
     } else if (config.CheckDuplicateDiscordID) {
-        player.kick(('error.duplicate_discord_id'));
+        player.kick(('The discord id is already in use'));
         return;
     }
 }
@@ -37,12 +37,24 @@ alt.on('playerConnect', (player: alt.Player) => {
     }
 
     if (identifier.length > 0) {
-        player.kick('error.no_valid_discord_id');
+        player.kick('No valid discord id');
         return;
     } 
 
     // Rest of your logic here
 });
+
+
+alt.on('playerDisconnect', (player: alt.Player, reason: string) => {
+    alt.log(`[tr-core] ${player.name}(${player.discordID}) disconnected. Reason: ${reason}`);
+    //player.Save();
+    player.destroy();
+})
+
+
+alt.on('anyResourceStart', (resourceName: string) => {
+    alt.log(`[tr-core] Resource ${resourceName} started.`);
+})
 
 
 

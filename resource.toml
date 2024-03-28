@@ -5,7 +5,7 @@ deps = [
     "discord-auth"
 ]
 required-permissions = ["Screen Capture"]
-client-main = "client/index.ts"
+client-main = "client/main.js"
 client-files = [
     "client/*",
     "shared/*"

@@ -4,7 +4,7 @@
 import * as alt from 'alt-client';
 import * as native from 'natives';
 import {  } from "./../server/player.js";
-import { RadioStation } from 'alt-server';
+
 
 
 /**
@@ -13,9 +13,9 @@ import { RadioStation } from 'alt-server';
  * @param cb - The player to get the data for.
  * @returns The player data if cb is null, otherwise null.
  */
-export function GetPlayerData(cb: PlayerData) {
+function GetPlayerData(cb: alt.Player) {
     if (!cb) { 
-        return PlayerData;
+        return alt.Player;
     }
     else {
         return null;
@@ -29,7 +29,7 @@ export function GetPlayerData(cb: PlayerData) {
  * @param entity - The entity to get the coordinates of.
  * @returns A Vector3 with the entity's coordinates.
  */
-export function GetCoords(entity: alt.Entity) {
+function GetCoords(entity: alt.Entity) {
     let coords = entity.pos
     return new alt.Vector3(coords.x, coords.y, coords.z)
 }
@@ -41,7 +41,7 @@ export function GetCoords(entity: alt.Entity) {
  * @param amount - The amount of the item the player needs to have.
  * @returns - Not implemented.
  */
-export function HasItem(items: string, amount: number) {
+function HasItem(items: string, amount: number) {
     // item has func
 
 }
@@ -60,7 +60,7 @@ export function HasItem(items: string, amount: number) {
  * @param a - The alpha (transparency) value. 
  * @param text - The text to draw.
  */
-export function DrawText(x: number, y: number, width: number, height: number, scale: number, r: number, g: number, b: number, a: number, text: string) {
+function DrawText(x: number, y: number, width: number, height: number, scale: number, r: number, g: number, b: number, a: number, text: string) {
     native.setTextFont(4);
     native.setTextScale(scale, scale);
     native.setTextColour(r, g, b, a);
@@ -77,7 +77,7 @@ export function DrawText(x: number, y: number, width: number, height: number, sc
  * @param z - The z coordinate to draw the text at.
  * @param text - The text to draw.
  */
-export function DrawText3D(x: number, y: number, z: number, text: string) {
+function DrawText3D(x: number, y: number, z: number, text: string) {
     native.setTextScale(0.35, 0.35);
     native.setTextFont(4);
     native.setTextProportional(true);
@@ -96,7 +96,7 @@ export function DrawText3D(x: number, y: number, z: number, text: string) {
  * 
  * @param animDict - The name of the animation dictionary to load.
  */
-export function RequestAnimDict(animDict: string) {
+function RequestAnimDict(animDict: string) {
     if (native.hasAnimDictLoaded(animDict)) { return }
     native.requestAnimDict(animDict)
 }
@@ -109,7 +109,7 @@ export function RequestAnimDict(animDict: string) {
  * @param upperbodyOnly - Whether to only apply the animation to the upper body.
  * @param duration - The duration in milliseconds to play the animation for. -1 for entire animation.
  */
-export function PlayAnim(animDict: string, animName: string, upperbodyOnly: boolean, duration: number) {
+function PlayAnim(animDict: string, animName: string, upperbodyOnly: boolean, duration: number) {
     let flag = upperbodyOnly && 16 || 0;
     let runTime = duration || -1;
     RequestAnimDict(animDict);
@@ -122,7 +122,7 @@ export function PlayAnim(animDict: string, animName: string, upperbodyOnly: bool
  * 
  * @param model - The model hash to load.
  */
-export function LoadModel(model: number) {
+function LoadModel(model: number) {
     if (native.hasModelLoaded(model)) { return }
     native.requestModel(model)
 }
@@ -132,7 +132,7 @@ export function LoadModel(model: number) {
  * 
  * @param animSet - The name of the animation set to load.
  */
-export function LoadAnimSet(animSet: string) {
+function LoadAnimSet(animSet: string) {
     if (native.hasAnimSetLoaded(animSet)) { return }
     native.requestAnimSet(animSet);
 } 
@@ -149,7 +149,7 @@ export function LoadAnimSet(animSet: string) {
  * @param texttype - The type/style of the notification. Default 'primary'.
  * @param length - The duration in ms to display the notification. Default 5000. 
  */
-export function Notify(text: string, caption?: string, texttype: string = 'primary', length: number = 5000) {
+function Notify(text: string, caption?: string, texttype: string = 'primary', length: number = 5000) {
     let message = {
         action: 'notify',
         type: texttype,
@@ -179,7 +179,7 @@ export function Notify(text: string, caption?: string, texttype: string = 'prima
  * @param ignoreList - List of peds to ignore/exclude
  * @returns Array of ped handles
  */
-export function GetPeds(ignoreList: any[]): any[] {
+function GetPeds(ignoreList: any[]): any[] {
     let pedPool = alt.Ped.all;
     let peds: any[] = [];
     ignoreList = ignoreList || [];
@@ -204,7 +204,7 @@ export function GetPeds(ignoreList: any[]): any[] {
  * @param p2 - The second point
  * @returns The distance between the two points
  */
-export function dist(p1: alt.Vector3, p2: alt.Vector3): number {
+function dist(p1: alt.Vector3, p2: alt.Vector3): number {
     return p1.sub(p2).length;
 }
 
@@ -216,7 +216,7 @@ export function dist(p1: alt.Vector3, p2: alt.Vector3): number {
  * @param ignoreList - List of peds to ignore when checking for closest.
  * @returns An array with the closest ped handle and the distance to it.
  */
-export function GetClosestPed(coords: alt.Vector3, ignoreList: any[]): [any, number] {
+function GetClosestPed(coords: alt.Vector3, ignoreList: any[]): [any, number] {
     let ped = native.playerPedId();
     if (coords) {
         coords = typeof coords === 'object' ? new alt.Vector3(coords.x, coords.y, coords.z) : coords;
@@ -247,7 +247,7 @@ export function GetClosestPed(coords: alt.Vector3, ignoreList: any[]): [any, num
  * 
  * @returns True if the ped has gloves, false if gloveless.
  */
-export function IsWearingGloves() {
+function IsWearingGloves() {
     let ped = native.playerPedId();
     let armIndex = native.getPedDrawableVariation(ped, 3);
     let model = native.getEntityModel(ped);
@@ -266,7 +266,7 @@ export function IsWearingGloves() {
  * @param coords - The coordinates to check distance from. Can be a Vector3 object or alt.Vector3 instance. Defaults to the local player's position.
  * @returns The closest player ID and the distance to them.
  */
-export function GetClosestPlayer(coords: alt.Vector3) {
+function GetClosestPlayer(coords: alt.Vector3) {
     let ped = native.playerPedId();
     if (coords) {
         coords = typeof coords === 'object' ? new alt.Vector3(coords.x, coords.y, coords.z) : coords;
@@ -297,7 +297,7 @@ export function GetClosestPlayer(coords: alt.Vector3) {
  * @param distance - The max distance to check for players. Default is 5.
  * @returns Array of player IDs that are within the specified distance.
  */
-export function GetPlayersFromCoords(coords: alt.Vector3, distance = 5) {
+function GetPlayersFromCoords(coords: alt.Vector3, distance = 5) {
     let players = alt.Player.all;
     let ped = native.playerPedId();
     if (coords) {
@@ -323,7 +323,7 @@ export function GetPlayersFromCoords(coords: alt.Vector3, distance = 5) {
  * @param coords - The position to check distance from. Can be a Vector3 object or alt.Vector3 instance. Defaults to the local player's position.
  * @returns An array with the closest vehicle's ID and distance to the coordinates.
  */
-export function GetClosestVehicle(coords: alt.Vector3) {
+function GetClosestVehicle(coords: alt.Vector3) {
     let ped = native.playerPedId();
     let vehicles = alt.Vehicle.all;
     let closestDistance = -1;
@@ -351,7 +351,7 @@ export function GetClosestVehicle(coords: alt.Vector3) {
  * @param coords - The position to check distance from. Can be a Vector3 object or alt.Vector3 instance. Defaults to the local player's position.
  * @returns An array with the closest object's ID and distance to the coordinates.
  */
-export function GetClosestObject(coords: alt.Vector3) {
+function GetClosestObject(coords: alt.Vector3) {
     let ped = native.playerPedId();
     let objects = alt.Object.all;
     let closestDistance = -1;
@@ -388,7 +388,7 @@ export function GetClosestObject(coords: alt.Vector3) {
  * @param vertex - Whether to use vertex positioning.  
  * @returns The created prop object.
  */
-export function AttachProp(ped: alt.Ped, model: string, boneId: number, x: number, y: number, z: number, xR: number, yR: number, zR: number, vertex: number) {
+function AttachProp(ped: alt.Ped, model: string, boneId: number, x: number, y: number, z: number, xR: number, yR: number, zR: number, vertex: number) {
     let modelHash: number = alt.hash(model);
     let bone = native.getPedBoneIndex(ped.id, boneId);
     LoadModel(modelHash);
@@ -408,7 +408,7 @@ export function AttachProp(ped: alt.Ped, model: string, boneId: number, x: numbe
  * @param teleportInto - Whether to teleport the player into the vehicle
  * @returns The spawned vehicle
  */
-export function SpwanVehicle(model: string, cb: any, coords: alt.Vector3, isNetworked: boolean, teleportInto: boolean) {
+function SpwanVehicle(model: string, cb: any, coords: alt.Vector3, isNetworked: boolean, teleportInto: boolean) {
     let ped = native.playerPedId()
     let modelHash: number = alt.hash(model)
     if (!native.isModelInCdimage(modelHash)) { return }
@@ -439,7 +439,7 @@ export function SpwanVehicle(model: string, cb: any, coords: alt.Vector3, isNetw
  * 
  * @param vehicle - The vehicle to delete 
  */
-export function DeleteVehicle(vehicle: alt.Vehicle) {
+function DeleteVehicle(vehicle: alt.Vehicle) {
     native.setEntityAsMissionEntity(vehicle, true, true);
     native.deleteVehicle(vehicle);
 }
@@ -450,7 +450,7 @@ export function DeleteVehicle(vehicle: alt.Vehicle) {
  * @param vehicle - The vehicle to get the plate text of
  * @returns The license plate text, or undefined if invalid vehicle
  */
-export function GetPlate(vehicle: alt.Vehicle) {
+function GetPlate(vehicle: alt.Vehicle) {
     if (vehicle == null) { return null }
     return (native.getVehicleNumberPlateText(vehicle))
 }
@@ -461,7 +461,26 @@ export function GetPlate(vehicle: alt.Vehicle) {
  * @param vehicle - The vehicle to get the label text for
  * @returns The vehicle label text, or undefined if invalid vehicle
  */
-export function GetVehicleLabe(vehicle: alt.Vehicle) {
+function GetVehicleLabe(vehicle: alt.Vehicle) {
     if (vehicle == null) { return null}
     return //GetLabelText(native.getDisplayNameFromVehicleModel(native.getEntityModel(vehicle)))
+}
+
+export {
+    GetPlayerData,
+    GetCoords,
+    HasItem,
+    DrawText,
+    GetClosestVehicle,
+    GetClosestObject,
+    AttachProp,
+    SpwanVehicle,
+    DeleteVehicle,
+    GetPlate,
+    GetVehicleLabe,
+    GetClosestPlayer,
+    IsWearingGloves,
+    GetClosestPed,
+    Notify,
+    LoadAnimSet,
 }
