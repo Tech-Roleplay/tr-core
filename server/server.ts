@@ -22,10 +22,11 @@ alt.on('resourceStart', () => {
     import("./commands.js");
     import("./functions.js");
     import("./events.js");
-    import("./player.js");
+    import("tr-core/server/player.js");
 
 
 })
+
 
 
 alt.on('player:create', (player: alt.Player, charid: number) => {
