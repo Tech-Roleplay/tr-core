@@ -2,7 +2,7 @@
 /// <reference types="@altv-vchat/types"/>
 
 import * as alt from 'alt-server';
-import * as chat from '../../chat/server/index.js';
+import * as chat from 'chat/server';
 import { HasPlayerPermission, Permissions, AddMoney, RemoveMoney, SetMoney, GetMoney, GetJob, setJob, ResetJob, SetGang, ResetGang, GetGang} from './player.js';
 import { Permission } from 'alt-shared';
 
