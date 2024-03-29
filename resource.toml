@@ -1,8 +1,7 @@
 type = "js"
 main = "server/server.js"
 deps = [ 
-    "chat",
-    "discord-auth"
+    "chat"
 ]
 required-permissions = ["Screen Capture"]
 client-main = "client/main.js"

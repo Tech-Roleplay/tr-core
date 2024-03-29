@@ -11,21 +11,6 @@ alt.on('playerDropped', (player: alt.Player, reason: string) => {
     player.destroy();
 })
 
-function onPlayerConnect(player: alt.Player) {
-    let identifier = GetIdentifier(player)
-    if (config.ServerClosed) {
-        player.kick(config.ServerClosedReason);
-        return;
-    }
-
-    if (identifier.length > 0) {
-        player.kick(('No valid discord id'));
-        return;
-    } else if (config.CheckDuplicateDiscordID) {
-        player.kick(('The discord id is already in use'));
-        return;
-    }
-}
 
 alt.on('playerConnect', (player: alt.Player) => {
     // Your logic here
@@ -36,7 +21,7 @@ alt.on('playerConnect', (player: alt.Player) => {
         return;
     }
 
-    if (identifier.length > 0) {
+    if (!identifier == undefined || !identifier == null) {
         player.kick('No valid discord id');
         return;
     } 
