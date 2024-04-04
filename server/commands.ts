@@ -6,45 +6,6 @@ import * as chat from 'chat/server';
 import { HasPlayerPermission, Permissions, AddMoney, RemoveMoney, SetMoney, GetMoney, GetJob, setJob, ResetJob, SetGang, ResetGang, GetGang} from './player.js';
 import { Permission } from 'alt-shared';
 
-
-
-
-
-// CommandList Array
-//export const CommandList: Commands[] = [];
-
-// command class
-
-/**
-     * Registers a new chat command with the given name, description, parameters, 
-     * required arguments flag, callback function, and required permission level.
-     * 
-     * @param Player - The player data for the player running the command
-     * @param commandname - The name of the command to register
-     * @param desc - A description of what the command does
-     * @param parameters - An object with name and description properties for the command arguments
-     * @param parameters.name - The name of the command argument
-     * @param parameters.description - The description of the command argument
-     * @param argsrequired - Whether the command requires arguments
-     * @param callback - The function to call when the command is run
-     * @param permission - The minimum permission level required to run this command
-    */
-export function addCommand(player: alt.Player, commandname: string, desc: string, parameters: { name: string, description: string }, argsrequired: boolean, permission: number, callback: () => void) {
-
-
-
-    // Check player permission
-    if (HasPlayerPermission(player, permission)) {
-
-        // Register the command and suggestion
-        chat.registerCmd(commandname, callback);
-
-
-    }
-
-}
-
-
 chat.registerCmd('help', (player: alt.Player, args: any) => {
     alt.log(`Help command called by ${player.name}`);
     chat.send(player, 'No help, xD ' + player.name);
